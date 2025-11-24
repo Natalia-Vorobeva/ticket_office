@@ -1,0 +1,37 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+html {
+	@apply w-full box-border h-full  scroll-smooth
+}
+body {
+	@apply max-h-full min-h-full text-[62.5%] m-0	w-full min-w-full
+}	
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+	color: white;
+  background-color: #242424;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+	width: 100%;
+	min-height: 100vh;
+}
+h1 {
+	@apply text-[6rem] leading-[0.6]
+}
+button {
+	@apply rounded-sm border-[1px] border-solid border-transparent py-[0.2rem] px-[0.8rem] cursor-pointer transition-colors duration-200 relative 
+}
+
+button:focus,
+button:focus-visible {
+	outline: none;
+}
+
+
+
