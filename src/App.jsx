@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { FILMS, SERIALS, CURRENT_DATE, MAX_OBJECT_DATES, INITIAL_SELECTED, INITIAL_RESERVATION } from './constants/constants.js'
+import { FILMS, SERIALS, CURRENT_DATE, MAX_OBJECT_DATES, INITIAL_SELECTED, INITIAL_RESERVATION, INFO, INFO_PAST, INFO_MODAL, PAST_CLASS, FUTURE_CLASS, ACTIVE_CLASS } from './constants/constants.js'
 import { db, counter, editObject, handlePlaces } from './middlewares/getDates'
 import { translit } from './middlewares/translit.js'
 import { newDate } from './middlewares/getDates'
@@ -8,6 +8,9 @@ import ListFilms from './components/ListFilms/ListFilms.jsx'
 import Path from './components/Path/Path.jsx'
 import Ticket from './components/Ticket/Ticket.jsx'
 import Modal from './components/Modal/Modal.jsx'
+import Schedule from './components/Schedule/Schedule.jsx'
+import HallList from './components/HallList/HallList.jsx'
+import InfoMessage from './components/InfoMessage/InfoMessage.jsx'
 
 function App() {
 	const { d, m, y } = CURRENT_DATE
@@ -38,7 +41,7 @@ function App() {
 	const [overlay, setOverlay] = useState(true)
 	const [sessionList, setSessionList] = useState([])
 	const [ticket, setTicket] = useState(false)
-	const [info, setInfo] = useState()
+	const [info, setInfo] = useState('')
 	const [infoPast, setInfoPast] = useState('')
 	const indexActive = dataBase.findIndex(function (el) {
 		return el.state == 'current'
@@ -50,7 +53,7 @@ function App() {
 	// * ключ для пересчета занятых мест по фильму, сеансу и залу для useMemo
 	const [observer, setObserver] = useState(0)
 
-	// * пересчет занятыx мест
+	// * пересчет занятыx мест заразные даты и сеансы
 	const visiblePlaces = useMemo(() => handlePlaces(observer, currentObject, reservation.hall, reservation.translate, reservation.hour),
 		[observer, currentObject, reservation.hall, reservation.translate, reservation.hour])
 
@@ -116,7 +119,7 @@ function App() {
 			setInfoPast('')
 		} else if (ind < indexActive) {
 			setInfo('')
-			setInfoPast('За прошедшие даты можно только посмотреть заполненность зала. Выберите фильм, сеанс и зал')
+			setInfoPast(INFO_PAST)
 			setActiveDate(false)
 		}
 
@@ -147,7 +150,7 @@ function App() {
 			setSessionList(data.sessions)
 		}
 		else {
-			setInfo('Выберите, пожалуйста, фильм')
+			setInfo(INFO)
 		}
 
 		reservation.day == null &&
@@ -160,7 +163,7 @@ function App() {
 			setInfoPast('')
 		} else if (index < indexActive) {
 			setInfo('')
-			setInfoPast('За прошедшие даты можно только посмотреть заполненность зала. Выберите фильм, сеанс и зал')
+			setInfoPast(INFO_PAST)
 			setActiveDate(false)
 		}
 	}
@@ -189,7 +192,7 @@ function App() {
 	const openModalPlaces = (units, serialNumber) => {
 
 		if (activeDate == false) {
-			setInfoPast(prev => prev + "" + 'МОЖНО ПОСМОТРЕТЬ ЗАПОЛНЕННОСТЬ ЗАЛА')
+			setInfoPast(INFO_MODAL)
 		} else if (activeDate == true) {
 			setObserver(prev => prev + 1)
 			setSelectedData((prev) => {
@@ -243,18 +246,15 @@ function App() {
 
 	return (
 		<div className='relative w-full min-h-[100vh] p-2 '>
-			{
-				ticket && <Ticket />
-			}
-			<h1 className=''>Билетная касса</h1>
+			{ 				ticket && <Ticket /> 			}
+			<h1 className='text-end py-6 font-montserrat'>Билетная касса</h1>
 			<div className='flex gap-2 '>
 				<ListFilms ticket={ticket} handleClickFilms={handleClickFilms} />
-				<div className='w-2/5 mt-8 pt-6 '>
-					<h4 className='flex text-left gap-6 pb-2 text-[1rem] italic'> Выбрать зал:
-						<p onClick={() => visibleHall(1)} className={` ${reservation.hall == 1 ? 'underline' : 'cursor-pointer'}`}>Зал 1</p>
-						<p onClick={() => visibleHall(2)} className={` ${reservation.hall == 2 ? 'underline' : 'cursor-pointer'}`}>Зал 2</p>
-					</h4>
-
+				<div className='w-full pt-6 '>
+					<HallList
+						visibleHall={visibleHall}
+						reservation={reservation}
+					/>
 					{visibleHall1 ?
 						<CinemaHall
 							activeDate={activeDate}
@@ -285,44 +285,24 @@ function App() {
 
 			<Path films={FILMS} currentArrPlaces={currentArrPlaces}
 				reservation={reservation} selectedDate={selectedData.date}
+				activeDate={activeDate}
 				ticket={ticket}
 				selectedPlace={selectedData.place}
 				selectedFilm={selectedData.film}
 				selectedHall={selectedData.hall}
 				handleBookSeats={handleBookSeats} />
 
-			<div className={`h-2 text-red-500`}>{infoPast} {info}</div>
+			<InfoMessage info={info} infoPast={infoPast} />
 
 			<div className='flex pt-2 w-full gap-6'>
-				<div className='flex gap-3 wrap text-center'>
-					{
-						dataBase.map((item, index) => {
-							const activeClass = 'bg-orange cursor-pointer text-white'
-							const futureClass = 'bg-night cursor-pointer text-silver-100'
-							const pastClass = 'bg-black text-white cursor-pointer'
-							const ind = index
-
-							const currData = { day: item.day, month: item.month, year: item.year, weekDay: item.day_week }
-
-							return <div key={`${item.day} ${item.month} ${item.year} /dataitem`}>
-								<div key={`${item.day}${item.month}${item.year}/dataitem`}
-									onClick={() => handleClickDate(item, index)}
-									className={`${indexActive === index ? activeClass : indexActive > index ? pastClass : futureClass} min-w-[2rem] flex flex-col`}>{item.day}
-									<span className='pb-4'>{item.month} </span>
-									<div>
-										{
-											sessionList?.map((item, index) => {
-												return <p key={`${index}/sessions`}
-													onClick={() => handleClickSession(item, currData, ind)}
-													className={`${reservation.film === '' && 'opacity-0'} `}>{item.time}:00</p>
-											})
-										}
-									</div>
-								</div>
-							</div>
-						})
-					}
-				</div>
+				<Schedule
+					dataBase={dataBase}
+					indexActive={indexActive}
+					sessionList={sessionList}
+					reservation={reservation}
+					handleClickDate={handleClickDate}
+					handleClickSession={handleClickSession}
+				/>
 			</div>
 			{
 				selectedData.placeModal && <Modal

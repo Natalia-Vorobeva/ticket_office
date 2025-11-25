@@ -28,11 +28,9 @@ function CinemaHall({
 		<section className={`relative ${className}`}>
 			{
 				 overlay && <div onClick={() => reservation.film !=="" && reservation.date !=="" && openModalPlaces(units, serialNumber)}
-					className="absolute z-5 inset-0 bg-silver-200 opacity-50"></div>
+					className="absolute z-5 inset-0"></div>
 			}
-
-			<h2 className="pl-1">Зал {serialNumber}</h2>
-			<div className="grid grid-cols-10 border-2">
+			<div className="grid grid-cols-10 border-t-2 border-t-blue mt-2 shadow-custom-inset">
 				{units &&
 					Array.from({ length: units }).map((_, index) => {
 						let bg = ''
@@ -45,7 +43,7 @@ function CinemaHall({
 						})
 						return <p key={`${index}/cinemahallitem/${serialNumber}`} id={`${index + 1}/cinemahallitem/${serialNumber}`}
 							onClick={(e) => place(e, index + 1)}
-							className={`cursor-pointer border-r border-t text-[.5rem] text-center ${overlay ? 'text-white' : 'text-black text-center'}  ${overlay ? '' : 'text-black text-center'} ${bg}`}>{index + 1}</p>
+							className={`cursor-pointer border-b border-r text-[.5rem] text-center ${overlay ? 'text-white' : 'text-black text-center'}  ${overlay ? '' : 'text-black text-center'} ${bg}`}>{index + 1}</p>
 					})
 				}
 			</div>

@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import { fontFamily } from"tailwindcss/defaultTheme"
 export default {
 	content: [
 		"./src/**/*.{js,jsx,ts,tsx, css}",
@@ -33,8 +34,33 @@ export default {
 				midbrown: '#7c7062',
 				midgray: '#8c8170',
 			},
+			fontFamily: {
+        montserrat: ["Montserrat", ...fontFamily.sans],
+      },
+			boxShadow: {
+				'custom-light': `4px 4px 10px
+                                 rgba(0, 0, 0, 0.1)`,
+				'custom-dark': `6px 6px 15px
+                                rgba(0, 0, 0, 0.3)`,
+				'custom-color': `5px 5px 20px
+                                 rgba(34, 60, 80, 0.7)`,
+				'custom-inset': `0px 94px 49px 0px rgba(0, 193, 193, 0.2) inset`
+			},
 		},
 	},
+	animation: {
+        pulse: "pulse 0.5s ease-in-out infinite",
+      },
+      keyframes: {
+        pulse: {
+          "0%, 100%": {
+            opacity: "1"
+          },
+          "50%": {
+            opacity: ".5"
+          },
+        },
+      },
 	safelist: [
 		{
 			pattern:

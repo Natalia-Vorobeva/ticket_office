@@ -14,37 +14,45 @@ function ListFilms({ handleClickFilms, ticket }) {
 	}
 
 	return (
-		<div className="flex flex-col py-2 mt-8 w-3/5 text-[1.8rem]">
+		<div className="py-2 w-2/5 text-[1.8rem]">
 			{
 				selectFilmModal ?
-					<section className='absolute z-10 inset-0 mt-2 w-[100%] text-[1rem] min-h-full bg-[#000] flex flex-col text-[.5rem] p-1 rounded-md'>
-						<p className='font-medium text-[2rem]'>Выберите фильм</p>
-						<p className='text-end  mt-[-2rem]  pb-[1rem] pr-[1rem]' onClick={() => setSelectFilmModal(false)}>Закрыть</p>
+					<section className='absolute z-10 inset-0 pt-2 w-[100%] text-[1rem] min-h-full bg-[#000] flex flex-col text-[.5rem] p-1 rounded-md'>
+						<p className='font-medium pt-4 pb-10 text-[2rem]'>Выберите фильм</p>
+
 						{
 							FILMS?.map((item, index) => {
-								return <p key={`${index}/films`}
+								return <div key={`${index}/films`}
 									onClick={() => handleClickFilms(item)}
-									className="w-full text-orange cursor-pointer">{item}
-									<span onClick={() => handleChoice(item)} className="pl-8 text-white">Выбрать</span></p>
+									className="w-full text-orange flex gap-2 border-b">
+									<p>{item}</p>
+									<span onClick={() => handleChoice(item)} className="ml-8 pb-2 text-white cursor-pointer">Выбрать</span>
+								</div>
 							})
 						}
+						<div className='pt-[2rem] pr-[1rem] flex justify-end'>
+							<p className="cursor-pointer inline" onClick={() => setSelectFilmModal(false)}>Закрыть</p>
+						</div>
+
 					</section>
 					:
 					null
 			}
-			<div className="flex flex-col pb-[1rem]">
-				<div className="w-full text-ellipsis line-clamp-6 text-[1.2rem]">
+			<div className="pb-[1rem]">
+				<div className="text-ellipsis line-clamp-6 text-[1.2rem]">
 					{
 						FILMS?.map((item, index) => {
-							return <p key={`${index}/films`}
-								onClick={() => handleClickFilms(item)}
-								className="w-full cursor-pointer">{item}</p>
+							return <div key={`${index}/films`}
+								className="">
+								<p className="inline cursor-pointer hover:text-blue"
+									onClick={() => handleClickFilms(item)}>{item}</p>
+							</div>
 						})
 					}
 				</div>
 				<div className="relative z-1">
-					<p onClick={() => { setSelectFilmModal(true) }}
-						className="relative z-1 text-orange pt-[1rem] cursor-pointer text-[1.5rem] italic">{ticket ? "ВАШ БИЛЕТ:" : "Все фильмы..."}</p>
+					<p onClick={() => setSelectFilmModal(true)}
+						className="relative z-1 text-orange pt-[1rem] cursor-pointer text-[1.5rem] italic font-poppins">{ticket ? "ВАШ БИЛЕТ:" : "Все фильмы..."}</p>
 				</div>
 			</div>
 		</div>

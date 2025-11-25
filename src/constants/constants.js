@@ -45,3 +45,11 @@ export const INITIAL_RESERVATION = {
 	places: []
 }
 
+export const INFO = 'Выберите, пожалуйста, фильм'
+export const INFO_PAST = 'За прошедшие даты можно только посмотреть заполненность зала. Выберите фильм, сеанс и зал'
+export const INFO_MODAL = 'РЕДАКТИРОВАТЬ ЗАПОЛНЕННОСТЬ ЗАЛА НЕЛЬЗЯ'
+
+export const ACTIVE_CLASS = 'bg-orange cursor-pointer text-white'
+export const FUTURE_CLASS = 'bg-night cursor-pointer text-silver-100'
+export const PAST_CLASS = 'bg-black text-white cursor-pointer'
+
