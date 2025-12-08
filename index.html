@@ -7,12 +7,51 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>cinema</title>
+	<title>ticket-system</title>
 </head><link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic" rel="stylesheet" />
 
 <body>
 	<div id="root"></div>
 	<script type="module" src="/src/main.jsx"></script>
+	<script>
+  function debugScroll() {
+    const problemElements = [];
+    const viewportWidth = window.innerWidth;
+    
+    document.querySelectorAll('*').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      const styles = getComputedStyle(el);
+      
+      if (rect.right > viewportWidth || rect.left < 0) {
+        problemElements.push({
+          element: el,
+          tag: el.tagName,
+          class: el.className,
+          width: el.offsetWidth,
+          styles: {
+            width: styles.width,
+            padding: styles.padding,
+            margin: styles.margin,
+            boxSizing: styles.boxSizing
+          }
+        });
+        
+        // Подсветить проблемные элементы
+        el.style.outline = '2px solid red';
+      }
+    });
+    
+    console.table(problemElements.map(p => ({
+      Tag: p.tag,
+      Class: p.class,
+      Width: p.width,
+      'CSS Width': p.styles.width,
+      'Box-Sizing': p.styles.boxSizing
+    })));
+  }
+  
+  debugScroll();
+</script>
 </body>
 
 </html>

@@ -2,34 +2,256 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities"; 
 
-html {
-	@apply w-full box-border h-full  scroll-smooth
-}
-body {
-	@apply max-h-full min-h-full text-[62.5%] m-0	w-full min-w-full font-montserrat
-}	
-:root {
-  line-height: 1.5;
-  font-weight: 400;
-	color: white;
-  background-color: #000;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-	width: 100%;
-	min-height: 100vh;
-}
-h1 {
-	@apply text-[3rem] leading-[0.6]
-}
-button {
-	@apply rounded-sm border-[1px] border-solid border-transparent py-[0.2rem] px-[0.8rem] transition-colors duration-200 relative 
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
 }
 
-button:focus,
-button:focus-visible {
-	outline: none;
+/* В ваш globals.css или index.css */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
+::-webkit-scrollbar-track {
+  background: rgba(26, 26, 46, 0.5);
+  border-radius: 4px;
+}
 
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #6d28d9, #8b5cf6);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #7c3aed, #a78bfa);
+}
+
+/* Добавьте в globals.css или index.css */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Стилизация скроллбара для сетки мест */
+.seats-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.seats-scrollbar::-webkit-scrollbar-track {
+  background: rgba(26, 26, 46, 0.5);
+  border-radius: 4px;
+}
+/* <button id="1/hallitem/1" class="
+                  px-4 py-2 md:px-6 md:py-3 rounded-lg transition-all duration-200
+                  font-medium text-sm md:text-base
+                  bg-gradient-to-r from-[#6d28d9] to-[#8b5cf6] text-white shadow-lg shadow-[#6d28d9]/30
+                "><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-gray-600"></div><span>Зал 1</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div></button> */
+
+.seats-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, #6d28d9, #8b5cf6);
+  border-radius: 4px;
+}
+
+.seats-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to right, #7c3aed, #a78bfa);
+}
+
+.date-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.date-scrollbar::-webkit-scrollbar-track {
+  background: rgba(26, 26, 46, 0.3);
+  border-radius: 3px;
+}
+
+.date-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, #6d28d9, #8b5cf6);
+  border-radius: 3px;
+}
+
+.date-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to right, #7c3aed, #a78bfa);
+}
+
+.neon-text {
+  text-shadow: 0 0 10px #22d3ee, 0 0 20px #22d3ee, 0 0 30px #22d3ee;
+}
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+/* Добавьте в глобальные стили */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+@keyframes text-shimmer {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes gradient-border {
+  0% {
+    border-image: linear-gradient(90deg, #a855f7, #ec4899, #f43f5e) 1;
+  }
+  50% {
+    border-image: linear-gradient(90deg, #f43f5e, #a855f7, #ec4899) 1;
+  }
+  100% {
+    border-image: linear-gradient(90deg, #ec4899, #f43f5e, #a855f7) 1;
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes time-border {
+  0% {
+    border-width: 2px;
+    border-color: rgba(6, 182, 212, 0.5);
+  }
+  50% {
+    border-width: 3px;
+    border-color: rgba(6, 182, 212, 0.8);
+  }
+  100% {
+    border-width: 2px;
+    border-color: rgba(6, 182, 212, 0.5);
+  }
+}
+
+@keyframes sweep {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200px 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-text-shimmer {
+  background: linear-gradient(90deg, #a855f7, #ec4899, #f43f5e, #ec4899, #a855f7);
+  background-size: 200% auto;
+  animation: text-shimmer 3s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background: linear-gradient(-45deg, #a855f7, #ec4899, #f43f5e);
+  background-size: 400% 400%;
+  animation: gradient 3s ease infinite;
+}
+
+.animate-gradient-border {
+  animation: gradient-border 3s linear infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-rotate {
+  animation: rotate 2s linear infinite;
+}
+
+.animate-time-border {
+  animation: time-border 1.5s ease-in-out infinite;
+}
+
+.animate-sweep {
+  animation: sweep 10s linear infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes progress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.animate-progress {
+  animation: progress 600s linear infinite;
+  animation-play-state: running;
+}
+
+.animate-ping-slow {
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+}
+
+.animate-spin-slow {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
