@@ -7,7 +7,7 @@
 
 **Онлайн-сервис для бронирования билетов в кино с удобным интерфейсом и хранением данных в браузере.**
 
-[Демо](https://natalia-vorobeva.github.io/ticket_office) | [Репозиторий](https://github.com/Natalia-Vorobeva/ticket_office)
+[Демо](https://ticket-office-booking.vercel.app) | [Репозиторий](https://github.com/Natalia-Vorobeva/ticket_office)
 
 ---
 
