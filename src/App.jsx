@@ -313,6 +313,7 @@ function App() {
 						setSessionList(filter);
 						setReservation(prev => ({ ...prev, hall: targetHall, day: data.day }));
 						setSelectedData(prev => ({ ...prev, hall: true }));
+						setObserver(prev => prev + 1);
 					}
 				}
 			} else {
