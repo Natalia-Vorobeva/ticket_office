@@ -41,7 +41,7 @@ function Header({ handleClickCity, handleClickCinema, currentCinema, currentCity
 								toggleDropdown={toggleDropdownCity}
 								className="min-w-[180px]"
 								buttonClass="bg-[#1a1a2e] border border-[#3d3d5d] hover:border-[#6d28d9] text-gray-200 px-3 py-2 rounded-lg flex justify-between items-center w-full transition-all duration-200 text-sm"
-								dropdownClass="absolute top-full mt-1 bg-[#1a1a2e] border border-[#3d3d5d] rounded-lg shadow-lg shadow-black/20 z-50 w-full overflow-hidden"
+								dropdownClass="absolute top-full mt-1 bg-[#1a1a2e] border border-[#3d3d5d] rounded-lg shadow-lg shadow-black/20 z-[50] w-full overflow-hidden"
 								itemClass="px-3 py-2 hover:bg-[#2d2d4d] text-gray-300 hover:text-white transition-colors duration-150 border-b border-[#2d2d4d] last:border-0 text-sm"
 								activeItemClass="bg-gradient-to-r from-[#6d28d9]/20 to-[#8b5cf6]/20 text-white border-l-4 border-[#6d28d9]"
 							/>
@@ -61,7 +61,7 @@ function Header({ handleClickCity, handleClickCinema, currentCinema, currentCity
 								toggleDropdown={toggleDropdownCinema}
 								className="min-w-[180px]"
 								buttonClass="bg-[#1a1a2e] border border-[#3d3d5d] hover:border-[#6d28d9] text-gray-200 px-3 py-2 rounded-lg flex justify-between items-center w-full transition-all duration-200 text-sm"
-								dropdownClass="absolute top-full mt-1 bg-[#1a1a2e] border border-[#3d3d5d] rounded-lg shadow-lg shadow-black/20 z-50 w-full overflow-hidden"
+								dropdownClass="absolute top-full mt-1 bg-[#1a1a2e] border border-[#3d3d5d] rounded-lg shadow-lg shadow-black/20 z-[50] w-full overflow-hidden"
 								itemClass="px-3 py-2 hover:bg-[#2d2d4d] text-gray-300 hover:text-white transition-colors duration-150 border-b border-[#2d2d4d] last:border-0 text-sm"
 								activeItemClass="bg-gradient-to-r from-[#6d28d9]/20 to-[#8b5cf6]/20 text-white border-l-4 border-[#6d28d9]"
 							/>
@@ -76,7 +76,6 @@ function Header({ handleClickCity, handleClickCinema, currentCinema, currentCity
 	return (
 		<div className="w-full">
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 pb-4 border-b border-[#2d2d4d]">
-				{/* Левая часть: Заголовок и подзаголовок */}
 				<div className="flex flex-col md:flex-row md:items-end gap-2 md:gap-4">
 					<h1 className='text-[2rem] md:text-[2.5rem] lg:text-[3rem] font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300 leading-tight'>
 						Билетная касса
@@ -85,9 +84,7 @@ function Header({ handleClickCity, handleClickCinema, currentCinema, currentCity
 						онлайн-бронирование
 					</span>
 				</div>
-
-				{/* Правая часть: Меню выбора */}
-				<div className="flex flex-wrap items-center gap-3 md:gap-4">
+			<div className="flex flex-wrap items-center gap-3 md:gap-4 header-dropdowns">
 					<div className="relative group">
 						<div className="mt-1">
 							<Dropdown
@@ -98,7 +95,7 @@ function Header({ handleClickCity, handleClickCinema, currentCinema, currentCity
 								toggleDropdown={toggleDropdownCity}
 								className="min-w-[180px]"
 								buttonClass="bg-[#1a1a2e] border border-[#3d3d5d] hover:border-[#6d28d9] text-gray-200 px-3 py-2 rounded-lg flex justify-between items-center w-full transition-all duration-200 text-sm"
-								dropdownClass="absolute top-full mt-1 bg-[#1a1a2e] border border-[#3d3d5d] rounded-lg shadow-lg shadow-black/20 z-50 w-full overflow-hidden"
+								dropdownClass="absolute top-full mt-1 bg-[#1a1a2e] border border-[#3d3d5d] rounded-lg shadow-lg shadow-black/20 z-[50] w-full overflow-hidden"
 								itemClass="px-3 py-2 hover:bg-[#2d2d4d] text-gray-300 hover:text-white transition-colors duration-150 border-b border-[#2d2d4d] last:border-0 text-sm"
 								activeItemClass="bg-gradient-to-r from-[#6d28d9]/20 to-[#8b5cf6]/20 text-white border-l-4 border-[#6d28d9]"
 							/>
@@ -118,7 +115,7 @@ function Header({ handleClickCity, handleClickCinema, currentCinema, currentCity
 								toggleDropdown={toggleDropdownCinema}
 								className="min-w-[180px]"
 								buttonClass="bg-[#1a1a2e] border border-[#3d3d5d] hover:border-[#6d28d9] text-gray-200 px-3 py-2 rounded-lg flex justify-between items-center w-full transition-all duration-200 text-sm"
-								dropdownClass="absolute top-full mt-1 bg-[#1a1a2e] border border-[#3d3d5d] rounded-lg shadow-lg shadow-black/20 z-50 w-full overflow-hidden"
+								dropdownClass="absolute top-full mt-1 bg-[#1a1a2e] border border-[#3d3d5d] rounded-lg shadow-lg shadow-black/20 z-[50] w-full overflow-hidden"
 								itemClass="px-3 py-2 hover:bg-[#2d2d4d] text-gray-300 hover:text-white transition-colors duration-150 border-b border-[#2d2d4d] last:border-0 text-sm"
 								activeItemClass="bg-gradient-to-r from-[#6d28d9]/20 to-[#8b5cf6]/20 text-white border-l-4 border-[#6d28d9]"
 							/>

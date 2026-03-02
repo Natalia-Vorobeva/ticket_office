@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import Ticket from "../Ticket/Ticket";
+
 function Path({
 	selectedFilm,
 	selectedHall,
@@ -7,12 +10,14 @@ function Path({
 	currentArrPlaces,
 	handleBookSeats,
 	ticket,
-	activeDate
+	expiresAt,
+	showConfirmInfo,
+	setShowConfirmInfo
 }) {
 
 	const time = reservation.date + " , " + reservation.time;
+	const [timeLeft, setTimeLeft] = useState('');
 
-	// Создаем данные для шагов с улучшенной информацией
 	const steps = [
 		{
 			id: 1,
@@ -33,23 +38,6 @@ function Path({
 		},
 		{
 			id: 2,
-			title: "Дата и время",
-			icon: (
-				<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-				</svg>
-			),
-			isActive: selectedDate,
-			isCompleted: selectedDate,
-			isAvailable: reservation.film !== "",
-			value: reservation.date && reservation.time ? time : "Не выбраны",
-			colorClass: selectedDate ? "text-white" : (reservation.film ? "text-gray-400" : "text-gray-600"),
-			bgClass: selectedDate ? "bg-gradient-to-br from-[#6d28d9] to-[#8b5cf6]" : "bg-[#1a1a2e]",
-			borderClass: selectedDate ? "border-[#8b5cf6]" : "border-[#2d2d4d]",
-			showValue: true
-		},
-		{
-			id: 3,
 			title: "Зал",
 			icon: (
 				<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,6 +51,23 @@ function Path({
 			colorClass: selectedHall ? "text-white" : (reservation.date && reservation.time ? "text-gray-400" : "text-gray-600"),
 			bgClass: selectedHall ? "bg-gradient-to-br from-[#6d28d9] to-[#8b5cf6]" : "bg-[#1a1a2e]",
 			borderClass: selectedHall ? "border-[#8b5cf6]" : "border-[#2d2d4d]",
+			showValue: true
+		},
+		{
+			id: 3,
+			title: "Дата и время",
+			icon: (
+				<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+				</svg>
+			),
+			isActive: selectedDate,
+			isCompleted: selectedDate,
+			isAvailable: reservation.film !== "",
+			value: reservation.date && reservation.time ? time : "Не выбраны",
+			colorClass: selectedDate ? "text-white" : (reservation.film ? "text-gray-400" : "text-gray-600"),
+			bgClass: selectedDate ? "bg-gradient-to-br from-[#6d28d9] to-[#8b5cf6]" : "bg-[#1a1a2e]",
+			borderClass: selectedDate ? "border-[#8b5cf6]" : "border-[#2d2d4d]",
 			showValue: true
 		},
 		{
@@ -84,13 +89,28 @@ function Path({
 		}
 	];
 
-	// Проверяем, все ли шаги завершены для активации кнопки
 	const allStepsCompleted = selectedFilm && selectedDate && selectedHall && selectedPlace;
 	const completedStepsCount = steps.filter(step => step.isCompleted).length;
 
+	useEffect(() => {
+		if (!ticket || !expiresAt) return;
+		const updateTimer = () => {
+			const remaining = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
+			const mins = Math.floor(remaining / 60);
+			const secs = remaining % 60;
+			setTimeLeft(`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`);
+		};
+		updateTimer();
+		const interval = setInterval(updateTimer, 1000);
+		return () => clearInterval(interval);
+	}, [ticket, expiresAt]);
+
+	const handleConfirmClick = () => {
+		setShowConfirmInfo(true);
+	};
+
 	return (
-		<div className="w-full bg-gradient-to-br from-[#1a1a2e] to-[#0f0f1f] rounded-2xl border border-[#2d2d4d] p-6 shadow-2xl shadow-[#6d28d9]/10 mb-6">
-			{/* Заголовок с прогрессом */}
+		<div className="w-full bg-gradient-to-br from-[#1a1a2e] to-[#0f0f1f] rounded-2xl border border-[#2d2d4d] p-6 shadow-2xl shadow-[#6d28d9]/10 relative">
 			<div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
 				<div className="flex items-center gap-4">
 					<div className="relative">
@@ -110,8 +130,6 @@ function Path({
 						<p className="text-gray-400 text-sm">Заполните все шаги для завершения бронирования</p>
 					</div>
 				</div>
-
-				{/* Прогресс-бар для мобильных */}
 				<div className="md:hidden w-full">
 					<div className="flex justify-between text-sm text-gray-400 mb-2">
 						<span>Прогресс</span>
@@ -125,8 +143,6 @@ function Path({
 					</div>
 				</div>
 			</div>
-
-			{/* Шаги бронирования - адаптивная сетка */}
 			<div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
 				{steps.map((step, index) => (
 					<div
@@ -138,7 +154,6 @@ function Path({
 								: 'border-[#2d2d4d] bg-[#0f0f1f] opacity-70'
 							}`}
 					>
-						{/* Линии соединения для десктопа */}
 						{index < steps.length - 1 && (
 							<>
 								<div className="hidden md:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 w-8 h-px bg-gradient-to-r from-[#3d3d5d] to-transparent"></div>
@@ -147,8 +162,6 @@ function Path({
 									}`}></div>
 							</>
 						)}
-
-						{/* Верхняя часть шага */}
 						<div className="flex items-center gap-3 mb-3">
 							<div className={`w-10 h-10 rounded-full flex items-center justify-center ${step.bgClass} ${step.borderClass} border-2`}>
 								<div className={step.colorClass}>
@@ -163,13 +176,11 @@ function Path({
 							</div>
 							<div>
 								<span className="text-xs text-gray-400">Шаг {step.id}</span>
-								<h4 className={`font-bold ${step.isCompleted ? 'text-white' : 'text-gray-300'}`}>
+								<h4 className={`font-bold ${step.isCompleted ? 'text-white' : 'text-gray-300'} md:text-[18px]`}>
 									{step.title}
 								</h4>
 							</div>
 						</div>
-
-						{/* Значение шага */}
 						<div className="mt-2">
 							<div className={`text-sm ${step.isCompleted ? 'text-white' : 'text-gray-400'} truncate`} title={step.value}>
 								{step.value}
@@ -185,32 +196,24 @@ function Path({
 				))}
 			</div>
 
-			{/* Кнопка бронирования - центр внимания */}
 			<div className="relative">
-				{/* Подсветка для активной кнопки */}
 				{allStepsCompleted && !ticket && (
 					<div className="absolute -inset-4 bg-gradient-to-r from-[#6d28d9]/10 to-[#8b5cf6]/10 rounded-2xl blur-xl"></div>
 				)}
 
 				<button
-					onClick={handleBookSeats}
+					onClick={ticket ? handleConfirmClick : handleBookSeats}
 					disabled={!allStepsCompleted && !ticket}
 					className={`
-            relative w-full py-4 rounded-xl font-bold text-xl
-            transition-all duration-300 transform hover:scale-[1.02] active:scale-95
-            shadow-2xl
-            ${allStepsCompleted || ticket
+						relative w-full py-4 rounded-xl font-bold text-xl
+						transition-all duration-300 transform hover:scale-[1.02] active:scale-95
+						shadow-2xl
+						${allStepsCompleted || ticket
 							? 'bg-gradient-to-r from-[#6d28d9] via-[#8b5cf6] to-[#a78bfa] text-white shadow-[#6d28d9]/40 hover:shadow-[#6d28d9]/60'
 							: 'bg-gradient-to-r from-[#1a1a2e] to-[#2d2d4d] text-gray-400 border border-[#2d2d4d] shadow-black/20 cursor-not-allowed'
 						}
-          `}
+					`}
 				>
-
-
-
-
-
-
 					<div className="flex items-center justify-center gap-3">
 						{ticket ? (
 							<>
@@ -220,8 +223,8 @@ function Path({
 									</svg>
 									<div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
 								</div>
-								<span className="font-bold text-lg bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-									ПОДТВЕРДИТЕ ЗА 10:00
+								<span className="font-bold text-lg">
+									ПОДТВЕРДИТЕ ЗА {timeLeft}
 								</span>
 							</>
 						) : (
@@ -229,17 +232,13 @@ function Path({
 								<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
 								</svg>
-								<span>Заполните все шаги для бронирования</span>
+								<span>{allStepsCompleted ? "Начать бронирование" : "Заполните все шаги для бронирования"}</span>
 							</>
 						)}
 					</div>
-
-					{/* Анимация для активной кнопки */}
 					{allStepsCompleted && !ticket && (
 						<div className="absolute inset-0 rounded-xl border-2 border-white/20 animate-pulse pointer-events-none"></div>
 					)}
-
-					{/* Дополнительная анимация для ticket = true */}
 					{ticket && (
 						<>
 							<div className="absolute inset-0 rounded-xl border-2 border-cyan-500/50 pointer-events-none animate-time-border"></div>
@@ -248,7 +247,6 @@ function Path({
 					)}
 				</button>
 
-				{/* Подсказка под кнопкой */}
 				<div className="mt-4 text-center">
 					{!allStepsCompleted && !ticket && (
 						<p className="text-sm text-gray-400">
@@ -257,51 +255,24 @@ function Path({
 					)}
 					{ticket && (
 						<div className="mt-4 text-center">
-
-
-							<div className="inline-flex flex-col items-center justify-center gap-1 px-4 py-2 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-lg border border-cyan-500/30">
-  <div className="flex items-center justify-between w-full">
-    <span className="text-cyan-300 text-xs">Подтверждение</span>
-    <span className="text-red-400 font-bold text-sm">09:38</span>
-  </div>
-  <div className="w-full h-1 bg-cyan-900/50 rounded-full overflow-hidden">
-    <div className="h-full bg-gradient-to-r from-cyan-500 to-red-500 animate-progress"></div>
-  </div>
-</div>
-							<div className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-lg border border-cyan-500/30">
-								<span className="text-cyan-300 text-sm font-medium">
-									Подтвердите за
-									<span className="mx-1 px-2 py-1 bg-red-500/20 rounded text-red-400 font-bold animate-pulse">
-										09:38
-									</span>
-									мин
-								</span>
-							</div>
-
-							<div className="relative inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-lg">
-  <div className="absolute inset-0 rounded-lg border border-red-500/50 animate-ping-slow pointer-events-none"></div>
-  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-  <span className="text-cyan-300 font-medium text-sm">Таймер: <span className="text-red-400 font-bold">09:38</span></span>
-</div>
-
-
 							<p className="text-sm text-gray-300 mt-2">
-								⏳ <span className="font-semibold text-cyan-300">Время истекает!</span> Подтвердите сейчас, чтобы не потерять места
+								⏳ <span className="font-semibold text-cyan-300">Подтвердите бронь в течение 10 минут</span>
 							</p>
 						</div>
 					)}
 				</div>
-
-
-
-
-
-
-
-
 			</div>
+
+			{showConfirmInfo && (
+				<Ticket
+					handleBookSeats={handleBookSeats}
+					reservation={reservation}
+					currentArrPlaces={currentArrPlaces}
+					setShowConfirmInfo={setShowConfirmInfo}
+				/>
+			)}
 		</div>
 	);
 }
 
-export default Path
+export default Path;

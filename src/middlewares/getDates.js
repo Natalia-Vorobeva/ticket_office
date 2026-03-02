@@ -1,5 +1,4 @@
 import { YESTERDAY, TODAY, DAY_MILSEC, DAYS, MONTH, CURRENT_DATE } from '../constants/constants.js'
-// const MoscowMovieTheaters = ['Художественный', 'Иллюзион', 'Пионер']
 
 export const stringDate = (data) => data.day + " " + data.month + " " + data.year + " (" + data.day_week + ")"
 export const stringTime = (time) => " " + time + ":" + "00"
@@ -111,7 +110,6 @@ const arrayPlaces = (data, film, hall, day, hour) => {
 	if (activeFilm.reserved == []) { return arr = [1, 2, 3] }
 
 	const reservation = activeFilm.reserved.find(r => r[day] === hour) || []
-	console.log('%cDATA', 'color: red', activeFilm.reserved, activeFilm.reserved, reservation)
 	if (activeFilm.reserved) {
 		arr = reservation.places
 	}

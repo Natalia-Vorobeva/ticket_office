@@ -9,11 +9,14 @@ function HallList({
 }) {
 
 	return (
-		<div className="mb-4">
+		<div className="relative z-[10] mb-4"> 
 			<div className="flex items-center mb-2">
-				<h4 className='text-lg md:text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent'>
-					Выберите зал:
-				</h4>
+				<div className="flex items-center gap-2 mb-4">
+					<div className="w-2 h-6 rounded-full bg-gradient-to-b from-[#6d28d9] to-[#8b5cf6]"></div>
+					<h2 className="text-lg md:text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+						Выберите зал
+					</h2>
+				</div>
 				<div className="flex flex-wrap pl-6  gap-1.5 mb-3">
 					{
 						halls.length &&

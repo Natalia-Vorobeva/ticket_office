@@ -8,7 +8,7 @@
 	box-sizing: border-box;
 }
 
-/* В ваш globals.css или index.css */
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -28,7 +28,6 @@
   background: linear-gradient(to bottom, #7c3aed, #a78bfa);
 }
 
-/* Добавьте в globals.css или index.css */
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
@@ -38,7 +37,6 @@
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
-/* Стилизация скроллбара для сетки мест */
 .seats-scrollbar::-webkit-scrollbar {
   height: 8px;
 }
@@ -47,11 +45,6 @@
   background: rgba(26, 26, 46, 0.5);
   border-radius: 4px;
 }
-/* <button id="1/hallitem/1" class="
-                  px-4 py-2 md:px-6 md:py-3 rounded-lg transition-all duration-200
-                  font-medium text-sm md:text-base
-                  bg-gradient-to-r from-[#6d28d9] to-[#8b5cf6] text-white shadow-lg shadow-[#6d28d9]/30
-                "><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-gray-600"></div><span>Зал 1</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div></button> */
 
 .seats-scrollbar::-webkit-scrollbar-thumb {
   background: linear-gradient(to right, #6d28d9, #8b5cf6);
@@ -90,7 +83,7 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
 }
-/* Добавьте в глобальные стили */
+
 @keyframes shimmer {
   0% {
     background-position: -200px 0;
@@ -254,4 +247,10 @@
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .header-dropdowns {
+    justify-content: flex-end !important;
+  }
 }

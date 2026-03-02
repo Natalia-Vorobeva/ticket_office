@@ -38,11 +38,10 @@ export const INFO_MODAL = 'РЕДАКТИРОВАТЬ ЗАПОЛНЕННОСТЬ
 export const HALL_INFO = "В этом зале нет сеансов на этот фильм"
 
 export const DATE_ACTIVE_CLASS = 'bg-gradient-to-br from-[#6d28d9] to-[#8b5cf6] text-white shadow-lg shadow-[#6d28d9]/30 border border-[#8b5cf6]'
-  export const DATE_FUTURE_CLASS = 'bg-gradient-to-br from-[#1a1a2e] to-[#2d2d4d] text-gray-300 hover:text-white border border-[#3d3d5d] hover:border-[#6d28d9]/50 cursor-pointer transition-all duration-200'
-  export const DATE_PAST_CLASS = 'bg-gradient-to-br from-[#0f0f1f] to-[#1a1a2e] text-gray-500 border border-[#2d2d4d] cursor-not-allowed'
+export const DATE_FUTURE_CLASS = 'bg-gradient-to-br from-[#1a1a2e] to-[#2d2d4d] text-gray-300 hover:text-white border border-[#3d3d5d] hover:border-[#6d28d9]/50 cursor-pointer transition-all duration-200'
+export const DATE_PAST_CLASS = 'bg-gradient-to-br from-[#0f0f1f] to-[#1a1a2e] text-gray-500 border border-[#2d2d4d] cursor-not-allowed'
 
-  // Стили для сеансов
-  export const SESSION_BUTTON_CLASS = 'px-4 py-2 rounded-lg bg-gradient-to-r from-[#1a1a2e] to-[#2d2d4d] border border-[#3d3d5d] text-gray-300 hover:from-[#6d28d9]/20 hover:to-[#8b5cf6]/20 hover:border-[#6d28d9]/50 hover:text-white transition-all duration-200 cursor-pointer text-sm font-medium'
+export const SESSION_BUTTON_CLASS = 'px-4 py-2 rounded-lg bg-gradient-to-r from-[#1a1a2e] to-[#2d2d4d] border border-[#3d3d5d] text-gray-300 hover:from-[#6d28d9]/20 hover:to-[#8b5cf6]/20 hover:border-[#6d28d9]/50 hover:text-white transition-all duration-200 cursor-pointer text-sm font-medium'
 
 export const ACTIVE_CLASS = 'bg-gradient-to-br from-[#6d28d9] to-[#8b5cf6] text-white shadow-lg shadow-[#6d28d9]/30 border border-[#8b5cf6]'
 export const FUTURE_CLASS = 'bg-gradient-to-br from-[#1a1a2e] to-[#2d2d4d] text-gray-300 border border-[#3d3d5d]'

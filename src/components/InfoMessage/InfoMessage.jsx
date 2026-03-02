@@ -3,8 +3,6 @@ function InfoMessage({
 	infoPast
 }) {
 	const hasMessages = info || infoPast;
-
-	// Стили для информационного сообщения (направляющего действия)
 	const infoStyles = {
 		container: 'bg-gradient-to-r from-[#1a1a2e]/80 to-[#2d2d4d]/60 border-l-4 border-[#6d28d9]',
 		icon: 'text-[#8b5cf6]',
@@ -17,7 +15,6 @@ function InfoMessage({
 			{hasMessages ? (
 				<div className={`${infoStyles.container} rounded-r-lg p-4 mb-4 shadow-lg backdrop-blur-sm`}>
 					<div className="flex items-start gap-3">
-						{/* Иконка */}
 						<div className="flex-shrink-0 mt-1">
 							<svg
 								className={`w-5 h-5 ${infoStyles.icon}`}
@@ -33,8 +30,6 @@ function InfoMessage({
 								/>
 							</svg>
 						</div>
-
-						{/* Текст сообщения */}
 						<div className="flex-1">
 							<div className={`text-sm md:text-base font-medium leading-relaxed ${infoStyles.text}`}>
 								{infoPast && (
@@ -50,14 +45,11 @@ function InfoMessage({
 							</div>
 						</div>
 					</div>
-
-					{/* Полоска-индикатор (фиолетовая) */}
 					<div className="mt-3 h-1 w-full bg-[#1a1a2e]/50 rounded-full overflow-hidden">
 						<div className="h-full rounded-full bg-gradient-to-r from-[#6d28d9] to-[#8b5cf6] w-1/3"></div>
 					</div>
 				</div>
 			) : (
-				// Пустой блок-плейсхолдер, сохраняющий место в верстке
 				<div className="min-h-[80px] opacity-0"></div>
 			)}
 		</div>

@@ -19,15 +19,10 @@ const dataHallsCurrentTheatre = (data, o) => data.filter((el) => el.movieTheater
 const theatreCinema = (data, currentCinema) => data.filter(el => el.movieTheaters == currentCinema)[0]
 
 export const arrayCity = (iCity, iCinema, CITIES_DB) => {
-	// console.log('%cDATA', 'color: purple', iCity, iCinema, CITIES_DB, 'iCity, iCinema, CITIES_DB')
 	const c = CITIES_DB[iCity].city
-	// массив названий кинотеатров города - для dropdown
 	const theatre = cityTheaters(CITIES_DB, c).cinema
-	// теккущий кинотеатр	
 	const currentTheatre = cityTheaters(CITIES_DB, c).cinema[iCinema]
-	// данные по каждому кинотеатру текущего города
 	const theaters = dataFilmsCurrentHall(CITIES_DB, c)
-	// данные по каждому залу текущего кинотеатра
 	const h = dataHallsCurrentTheatre(theaters, currentTheatre)
 	const f = theatreCinema(theaters, currentTheatre)
 
@@ -42,11 +37,10 @@ export const INITIAL_DATA = {
 	halls: h
 }
 
-//  СЧЕТЧИК ЗАЛОВ, В КОТОРЫХ ИДЕТ ВЫБРАННЫЙ ФИЛЬМ
 export const counterHalls = (elements, item) => {
-  const counter = elements
-    .map((el, i) => el.includes(item) ? i + 1 : null)
-    .filter(index => index !== null)
+	const counter = elements
+		.map((el, i) => el.includes(item) ? i + 1 : null)
+		.filter(index => index !== null)
 
-  return counter.length === elements.length ? [999] : counter
+	return counter.length === elements.length ? [999] : counter
 }

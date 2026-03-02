@@ -12,7 +12,6 @@ function Dropdown({
   itemClass = DROPDOWN_STYLES.itemClass,
   activeItemClass = DROPDOWN_STYLES.activeItemClass
 }) {
-// console.log(DROPDOWN_STYLES.itemClass)
   const onClick = (city) => {
     handleClick(city)
   }

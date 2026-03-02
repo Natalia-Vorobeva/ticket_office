@@ -2,8 +2,6 @@
 import { fontFamily } from "tailwindcss/defaultTheme"
 export default {
 	content: [
-		// "./src/**/*.{js,jsx,ts,tsx, css}",
-		// "./public/index.html"
 		"./index.html",
 		"./src/**/*.{js,ts,jsx,tsx}",
 	],
@@ -43,12 +41,6 @@ export default {
 				montserrat: ["Montserrat", ...fontFamily.sans],
 			},
 			boxShadow: {
-				// 'custom-light': `4px 4px 10px
-				//                          rgba(0, 0, 0, 0.1)`,
-				// 'custom-dark': `6px 6px 15px
-				//                         rgba(0, 0, 0, 0.3)`,
-				// 'custom-color': `5px 5px 20px
-				//                          rgba(34, 60, 80, 0.7)`,
 				'custom-inset': `0px 94px 49px 0px rgba(0, 193, 193, 0.2) inset`
 			},
 		},
