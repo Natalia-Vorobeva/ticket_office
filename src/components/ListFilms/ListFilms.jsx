@@ -1,10 +1,8 @@
-import React from 'react';
-
 function ListFilms({ handleClickFilms, ticket, films, setListActiveHalls, openFilmInfo, openSelectFilm, selectedFilm }) {
   return (
-    <div className="flex-1">
+    <div className="flex-1 w-full max-w-full">
       <div className="h-full">
-        <div className="bg-[#1a1a2e]/50 backdrop-blur-sm rounded-xl border border-[#2d2d4d] p-4 shadow shadow-black/10 h-full">
+        <div className="bg-[#1a1a2e]/50 backdrop-blur-sm rounded-xl border border-[#2d2d4d] shadow shadow-black/10 h-full">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-2 h-6 rounded-full bg-gradient-to-b from-[#6d28d9] to-[#8b5cf6]"></div>
             <h2 className="text-lg md:text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
@@ -44,13 +42,13 @@ function ListFilms({ handleClickFilms, ticket, films, setListActiveHalls, openFi
                     <div className="flex gap-2 flex-shrink-0">
                       <button
                         onClick={() => handleClickFilms({ film: item })}
-                        className="px-2 py-1 bg-gradient-to-r from-[#6d28d9] to-[#8b5cf6] text-white rounded text-xs font-medium hover:from-[#7c3aed] hover:to-[#a78bfa] transition-all duration-200 shadow shadow-[#6d28d9]/20"
+                        className="px-2 py-1 bg-gradient-to-r from-[#6d28d9] to-[#8b5cf6] text-white rounded text-xs font-medium hover:from-[#7c3aed] hover:to-[#a78bfa] transition-all duration-200 shadow shadow-[#6d28d9]/20 text-[10px]"
                       >
                         Выбрать
                       </button>
                       <button
                         onClick={() => openFilmInfo({ film: item })}
-                        className="px-2 py-1 bg-transparent border border-gray-600 text-gray-300 rounded text-xs font-medium hover:bg-gray-800/50 hover:text-white hover:border-gray-500 transition-all duration-200"
+                        className="px-2 py-1 bg-transparent border border-gray-600 text-gray-300 rounded text-[10px] font-medium hover:bg-gray-800/50 hover:text-white hover:border-gray-500 transition-all duration-200"
                       >
                         Подробнее
                       </button>

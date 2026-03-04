@@ -57,8 +57,8 @@ function App() {
 	const [expiresAt, setExpiresAt] = useState(null);
 	const [timerInterval, setTimerInterval] = useState(null);
 	const [showConfirmInfo, setShowConfirmInfo] = useState(false);
+	const [showInfo, setShowInfo] = useState(false);
 
-	// * здесь пересчет дат при первой загрузке страницы
 	useEffect(() => {
 		const storedData = localStorage.getItem("date-tickets")
 		if (!storedData) {
@@ -66,6 +66,7 @@ function App() {
 			setDataBase(db)
 			return
 		}
+		// * здесь пересчет дат при первой загрузке страницы	
 		const parsedArray = JSON.parse(storedData)
 		let currentObject = null
 
@@ -113,12 +114,31 @@ function App() {
 		}
 	}, [indexActive]);
 
+	useEffect(() => {
+		if (info || infoPast) {
+			setShowInfo(true);
+			const timer = setTimeout(() => setShowInfo(false), 4000); // 4 секунды
+			return () => clearTimeout(timer);
+		}
+	}, [info, infoPast]);
+
+
+
 	// * ключ для пересчета занятых мест по фильму, сеансу и залу для useMemo
 	const [observer, setObserver] = useState(0)
 
 	// * пересчет занятыx мест заразные даты и сеансы
 	const visiblePlaces = useMemo(() => handlePlaces(observer, dataCurrentTheatre.halls, reservation.film, reservation.hall, reservation.day, reservation.hour),
 		[observer, dataCurrentTheatre.halls, reservation.film, reservation.hall, reservation.day, reservation.hour])
+
+	const allStepsCompleted = selectedData.film && selectedData.date && selectedData.hall && selectedData.place;
+
+	// Определяем, какой компонент показывать внизу
+	const showTicket = ticket;
+	const showPath = !ticket;
+
+	// Высота нижней панели для отступа
+	const bottomPanelHeight = 100;
 
 	const resetBooking = useCallback(() => {
 		if (timerInterval) clearInterval(timerInterval);
@@ -156,9 +176,6 @@ function App() {
 			if (timerInterval) clearInterval(timerInterval);
 		};
 	}, [timerInterval]);
-
-
-
 
 	const handleClickCity = (item) => {
 		const i = dataCities.findIndex(el => el.city === item)
@@ -426,27 +443,23 @@ function App() {
 	};
 
 	return (
-		<div className={`px-4 sm:px-6 md:px-8 relative w-full max-w-full text-[2rem] md:text-[2.5rem] leading-[0.7] grid grid-rows-[auto_1fr_auto] gap-4 md:gap-6 min-h-screen bg-gradient-to-br from-[#0a0a1a] via-[#0f172a] to-[#0a0a1a] text-gray-100 overflow-x-hidden ${selectedData.placeModal || selectFilmModal ? 'overflow-hidden' : ''}`}>
-			{ticket && <Ticket />}
-
-			<div className="max-w-full pt-3">
-				<Header
-					ticket={ticket}
-					currentCity={dataCurrentTheatre.city}
-					handleClickCity={handleClickCity}
-					currentCinema={dataCurrentTheatre.cinema}
-					handleClickCinema={handleClickCinema}
-					cinemaList={dataCurrentTheatre.cinemaList}
-				/>
-			</div>
-
-			<div className='w-full'>
-				<div className='relative overflow-hidden rounded-xl mb-6'>
-					<div className='absolute inset-0 bg-gradient-to-r from-[#1e40af] via-[#3b82f6] to-[#60a5fa] opacity-20 blur-lg'></div>
+		<>
+			<div className={`px-4 sm:px-6 md:px-8 relative w-full max-w-full text-[2rem] md:text-[2.5rem] leading-[0.7] grid grid-rows-[auto_1fr_auto] gap-4 md:gap-6 min-h-screen bg-gradient-to-br from-[#0a0a1a] via-[#0f172a] to-[#0a0a1a] text-gray-100 overflow-x-hidden pb-[70px] ${selectedData.placeModal || selectFilmModal ? 'overflow-hidden' : ''}`}>
+				{/* Основной контент с нижним отступом */}
+				<div className="max-w-full pt-3">
+					<Header
+						ticket={ticket}
+						currentCity={dataCurrentTheatre.city}
+						handleClickCity={handleClickCity}
+						currentCinema={dataCurrentTheatre.cinema}
+						handleClickCinema={handleClickCinema}
+						cinemaList={dataCurrentTheatre.cinemaList}
+					/>
 				</div>
 
-				<div className='flex flex-col lg:flex-row w-full gap-4 md:gap-6 isolate'>
-					<div className='lg:basis-2/5'>
+				<div className='flex flex-col lg:flex-row gap-4 md:gap-6 isolate'>
+					{/* Фильмы – всегда */}
+					<div className='lg:basis-2/5 min-w-0 overflow-hidden'>
 						<div ref={filmsRef} className={`sticky top-4 ${ticket && "pointer-events-none"}`}>
 							<ListFilms
 								films={dataCurrentTheatre.dataTheatre}
@@ -460,8 +473,9 @@ function App() {
 						</div>
 					</div>
 
-					<div ref={hallsRef} className='relative z-[10] lg:basis-3/5'>
-						<div className='relative z-[10] bg-[#1e293b]/80 backdrop-blur-sm rounded-xl border border-[#334155] p-4 shadow-xl shadow-[#1e40af]/10'>
+					{/* Залы – только на больших экранах (lg и выше) */}
+					<div className='hidden lg:block lg:basis-3/5 relative z-[10]'>
+						<div className='bg-[#1e293b]/80 backdrop-blur-sm rounded-xl border border-[#334155] p-4 shadow-xl shadow-[#1e40af]/10'>
 							<HallList
 								info={hallInfo}
 								halls={dataCurrentTheatre.halls}
@@ -469,7 +483,6 @@ function App() {
 								reservation={reservation}
 								listActiveHalls={listActiveHalls}
 							/>
-
 							<div className='mt-4'>
 								{dataCurrentTheatre.halls.map((item, index) => (
 									<CinemaHall
@@ -494,45 +507,91 @@ function App() {
 						</div>
 					</div>
 				</div>
-
-				<div ref={pathRef} className='relative  mt-6 bg-silver-700'>
-					<Path
-						currentArrPlaces={currentArrPlaces}
-						reservation={reservation}
-						selectedDate={selectedData.date}
-						activeDate={activeDate}
-						ticket={ticket}
-						expiresAt={expiresAt}
-						showConfirmInfo={showConfirmInfo}
-						setShowConfirmInfo={setShowConfirmInfo}
-						selectedPlace={selectedData.place}
-						selectedFilm={selectedData.film}
-						selectedHall={selectedData.hall}
-						handleBookSeats={handleBookSeats}
-					/>
+				<div ref={dateRef} className='pt-4 pb-6 w-full min-w-0'>
+					<div className="flex gap-3 pb-3 date-scrollbar-wrapper max-w-full">
+						<Schedule
+							data={dataCurrentTheatre.halls}
+							dataBase={dataBase}
+							listActiveHalls={listActiveHalls}
+							indexActive={indexActive}
+							selectedDateIndex={selectedDateIndex}
+							sessionList={sessionList}
+							reservation={reservation}
+							handleClickDate={handleClickDate}
+							handleClickSession={handleClickSession}
+						/>
+					</div>
 				</div>
-
-				<div className='mt-4'>
-					<InfoMessage info={info} infoPast={infoPast} />
+				<div className='block lg:hidden w-full mt-4'>
+					<div className='bg-[#1e293b]/80 backdrop-blur-sm rounded-xl border border-[#334155] p-4 shadow-xl shadow-[#1e40af]/10'>
+						<HallList
+							info={hallInfo}
+							halls={dataCurrentTheatre.halls}
+							visibleHall={visibleHall}
+							reservation={reservation}
+							listActiveHalls={listActiveHalls}
+						/>
+						<div className='mt-4'>
+							{dataCurrentTheatre.halls.map((item, index) => (
+								<CinemaHall
+									key={`${index + 1}/cinemaHall-mobile`}
+									id={`${index + 1}/cinemaHall`}
+									hallInfo={hallInfo}
+									reservation={reservation}
+									currentDbPlaces={visiblePlaces || undefined}
+									currentArrPlaces={currentArrPlaces}
+									openModalPlaces={openModalPlaces}
+									serialNumber={item.hall}
+									units={item.units}
+									overlay={overlay}
+									ticket={ticket}
+									setCurrentArrPlaces={setCurrentArrPlaces}
+									activeDate={activeDate}
+									activeHall={activeHall}
+									modalState={selectedData.placeModal}
+								/>
+							))}
+						</div>
+					</div>
 				</div>
 			</div>
-
-			<div ref={dateRef} className='pt-4 pb-6 w-full min-w-0'>
-				<div className="flex gap-3 pb-3 date-scrollbar-wrapper max-w-full">
-					<Schedule
-						data={dataCurrentTheatre.halls}
-						dataBase={dataBase}
-						listActiveHalls={listActiveHalls}
-						indexActive={indexActive}
-						selectedDateIndex={selectedDateIndex}
-						sessionList={sessionList}
-						reservation={reservation}
-						handleClickDate={handleClickDate}
-						handleClickSession={handleClickSession}
-					/>
+			{showInfo && (info || infoPast) && (
+				<div className="fixed bottom-[70px] left-0 right-0 z-50 pointer-events-none">
+					<div className="max-w-7xl mx-auto px-4">
+						<InfoMessage info={info} infoPast={infoPast} />
+					</div>
 				</div>
-			</div>
-
+			)}
+			{showPath && (
+				<Path
+					currentArrPlaces={currentArrPlaces}
+					reservation={reservation}
+					selectedDate={selectedData.date}
+					activeDate={activeDate}
+					ticket={ticket}
+					expiresAt={expiresAt}
+					selectedPlace={selectedData.place}
+					selectedFilm={selectedData.film}
+					selectedHall={selectedData.hall}
+					handleBookSeats={handleBookSeats}
+					allStepsCompleted={allStepsCompleted}
+					onStepClick={(stepId) => {
+						// прокрутка к соответствующему блоку
+						if (stepId === 1) scrollToSection(filmsRef);
+						else if (stepId === 2) scrollToSection(dateRef);
+						else if (stepId === 3) scrollToSection(hallsRef);
+						else if (stepId === 4) scrollToSection(pathRef);
+					}}
+				/>
+			)}
+			{showTicket && (
+				<Ticket
+					currentArrPlaces={currentArrPlaces}
+					reservation={reservation}
+					handleBookSeats={handleBookSeats}
+					onClose={() => { }} // не нужен, но можно передать пустую функцию
+				/>
+			)}
 			{selectedData.placeModal && (
 				<Modal
 					overlay={overlay}
@@ -565,59 +624,7 @@ function App() {
 					onClose={() => setSelectFilmModal(false)}
 				/>
 			)}
-			{reservation.film && !filmInfoModal.open && !selectFilmModal && !selectedData.placeModal && (
-				<div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${isMenuCollapsed ? 'w-12' : 'w-auto'} bg-[#1a1a2e]/80 backdrop-blur-md rounded-lg border border-[#3d3d5d] p-1 shadow-xl`}>
-					<button
-						onClick={() => setIsMenuCollapsed(!isMenuCollapsed)}
-						className="w-full flex items-center justify-center p-2 text-gray-400 hover:text-white transition-colors"
-					>
-						{isMenuCollapsed ? '←' : '→'}
-					</button>
-					<div className={`flex flex-col gap-1 ${isMenuCollapsed ? 'items-center' : ''}`}>
-						<button
-							onClick={() => scrollToSection(filmsRef)}
-							className={`p-2 rounded-lg hover:bg-[#2d2d4d] text-white flex items-center gap-2 transition-colors ${isMenuCollapsed ? 'justify-center' : 'justify-start'}`}
-							title="Фильмы"
-						>
-							<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-							</svg>
-							{!isMenuCollapsed && <span className="text-sm">Фильмы</span>}
-						</button>
-						<button
-							onClick={() => scrollToSection(dateRef)}
-							className={`p-2 rounded-lg hover:bg-[#2d2d4d] text-white flex items-center gap-2 transition-colors ${isMenuCollapsed ? 'justify-center' : 'justify-start'}`}
-							title="Дата"
-						>
-							<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-							</svg>
-							{!isMenuCollapsed && <span className="text-sm">Дата</span>}
-						</button>
-						<button
-							onClick={() => scrollToSection(hallsRef)}
-							className={`p-2 rounded-lg hover:bg-[#2d2d4d] text-white flex items-center gap-2 transition-colors ${isMenuCollapsed ? 'justify-center' : 'justify-start'}`}
-							title="Зал"
-						>
-							<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-							</svg>
-							{!isMenuCollapsed && <span className="text-sm">Зал</span>}
-						</button>
-						<button
-							onClick={() => scrollToSection(pathRef)}
-							className={`p-2 rounded-lg hover:bg-[#2d2d4d] text-white flex items-center gap-2 transition-colors ${isMenuCollapsed ? 'justify-center' : 'justify-start'}`}
-							title="Бронь"
-						>
-							<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 5v2m-4 4h8M4 21h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v15a1 1 0 001 1z" />
-							</svg>
-							{!isMenuCollapsed && <span className="text-sm">Бронь</span>}
-						</button>
-					</div>
-				</div>
-			)}
-		</div>
+		</>
 
 	)
 }

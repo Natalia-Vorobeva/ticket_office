@@ -1,5 +1,3 @@
-import InfoMessage from "../InfoMessage/InfoMessage"
-
 function HallList({
 	halls,
 	visibleHall,
@@ -9,7 +7,7 @@ function HallList({
 }) {
 
 	return (
-		<div className="relative z-[10] mb-4"> 
+		<div className="relative z-[10] mb-4">
 			<div className="flex items-center mb-2">
 				<div className="flex items-center gap-2 mb-4">
 					<div className="w-2 h-6 rounded-full bg-gradient-to-b from-[#6d28d9] to-[#8b5cf6]"></div>
@@ -42,8 +40,6 @@ function HallList({
 					}
 				</div>
 			</div>
-
-			<InfoMessage info={info} />
 		</div>
 	)
 }
