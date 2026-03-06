@@ -279,36 +279,6 @@ function App() {
 		setSelectFilmModal(false)
 	};
 
-	const handleClickSession = (item, time, ind) => {
-
-		setCurrentArrPlaces([])
-		reservation.hour == null && setObserver(prev => prev + 1)
-		if (ind >= indexActive) {
-			setActiveDate(true)
-			setInfoPast('')
-		} else if (ind < indexActive) {
-			setInfo('')
-			setInfoPast(INFO_PAST)
-			setActiveDate(false)
-		}
-
-		if (reservation.day === item.day) {
-			setReservation((prev) => {
-				return { ...prev, date: stringDate(item), time: stringTime(time), hour: time }
-			})
-			setSelectedData((prev) => {
-				return { ...prev, date: true, hour: true }
-			})
-		} else {
-			setReservation((prev) => {
-				return { ...prev, day: item.day, date: stringDate(item), time: stringTime(time), hour: time }
-			})
-			setSelectedData((prev) => {
-				return { ...prev, date: true, hour: true }
-			})
-		}
-	}
-
 	const handleClickDate = (data, index) => {
 		setSelectedDateIndex(index);
 
@@ -320,7 +290,7 @@ function App() {
 						const filter = hallObj.films.find(el => el.film === reservation.film)?.sessions || [];
 						setSessionList(filter);
 						setReservation(prev => ({ ...prev, hall: 1, day: data.day }));
-						setSelectedData(prev => ({ ...prev, hall: true }));
+						setSelectedData(prev => ({ ...prev, hall: true, date: true }));
 					}
 				} else {
 					const targetHall = listActiveHalls[0];
@@ -329,7 +299,7 @@ function App() {
 						const filter = hallObj.films.find(el => el.film === reservation.film)?.sessions || [];
 						setSessionList(filter);
 						setReservation(prev => ({ ...prev, hall: targetHall, day: data.day }));
-						setSelectedData(prev => ({ ...prev, hall: true }));
+						setSelectedData(prev => ({ ...prev, hall: true, date: true }));
 						setObserver(prev => prev + 1);
 					}
 				}
@@ -339,7 +309,7 @@ function App() {
 					const filter = hallObj.films.find(el => el.film === reservation.film)?.sessions || [];
 					setSessionList(filter);
 					setReservation(prev => ({ ...prev, day: data.day }));
-					setSelectedData(prev => ({ ...prev, hall: true }));
+					setSelectedData(prev => ({ ...prev, hall: true, date: true }));
 				} else {
 					console.error('Зал не найден', reservation.hall);
 				}
@@ -357,6 +327,47 @@ function App() {
 			setActiveDate(false);
 		}
 	};
+
+	const handleClickSession = (item, time, ind) => {
+		setCurrentArrPlaces([]);
+		reservation.hour == null && setObserver(prev => prev + 1);
+		if (ind >= indexActive) {
+			setActiveDate(true);
+			setInfoPast('');
+		} else if (ind < indexActive) {
+			setInfo('');
+			setInfoPast(INFO_PAST);
+			setActiveDate(false);
+		}
+
+		if (reservation.day === item.day) {
+			setReservation(prev => ({
+				...prev,
+				date: stringDate(item),
+				time: stringTime(time),
+				hour: time
+			}));
+			setSelectedData(prev => ({
+				...prev,
+				date: true,
+				hour: true
+			}));
+		} else {
+			setReservation(prev => ({
+				...prev,
+				day: item.day,
+				date: stringDate(item),
+				time: stringTime(time),
+				hour: time
+			}));
+			setSelectedData(prev => ({
+				...prev,
+				date: true,
+				hour: true
+			}));
+		}
+	};
+
 	const handleInfoHalls = (num) => {
 		const s = listActiveHalls.includes(num)
 		if (s == true) {
@@ -387,9 +398,9 @@ function App() {
 	}
 
 	const openModalPlaces = (units, serialNumber) => {
+		if (!reservation.film || !reservation.day || !reservation.hour) return;
 		setHallInfo('')
 		setOverlay(false)
-
 		if (activeDate == false) {
 			setInfoPast(INFO_MODAL)
 		} else if (activeDate == true) {
@@ -440,6 +451,10 @@ function App() {
 
 	const scrollToSection = (ref) => {
 		ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	};
+
+	const handleEditBooking = () => {
+		setTicket(false); // просто скрываем Ticket, бронирование остаётся
 	};
 
 	return (
@@ -523,7 +538,7 @@ function App() {
 					</div>
 				</div>
 				<div className='block lg:hidden w-full mt-4'>
-					<div className='bg-[#1e293b]/80 backdrop-blur-sm rounded-xl border border-[#334155] p-4 shadow-xl shadow-[#1e40af]/10'>
+					<div ref={hallsRef} className='bg-[#1e293b]/80 backdrop-blur-sm rounded-xl border border-[#334155] p-4 shadow-xl shadow-[#1e40af]/10'>
 						<HallList
 							info={hallInfo}
 							halls={dataCurrentTheatre.halls}
@@ -576,11 +591,11 @@ function App() {
 					handleBookSeats={handleBookSeats}
 					allStepsCompleted={allStepsCompleted}
 					onStepClick={(stepId) => {
-						// прокрутка к соответствующему блоку
 						if (stepId === 1) scrollToSection(filmsRef);
 						else if (stepId === 2) scrollToSection(dateRef);
-						else if (stepId === 3) scrollToSection(hallsRef);
-						else if (stepId === 4) scrollToSection(pathRef);
+						else if (stepId === 3) scrollToSection(dateRef);
+						else if (stepId === 4) scrollToSection(hallsRef);
+						else if (stepId === 5) scrollToSection(hallsRef);
 					}}
 				/>
 			)}
@@ -589,7 +604,8 @@ function App() {
 					currentArrPlaces={currentArrPlaces}
 					reservation={reservation}
 					handleBookSeats={handleBookSeats}
-					onClose={() => { }} // не нужен, но можно передать пустую функцию
+					onEdit={handleEditBooking}
+					onClose={() => { }}
 				/>
 			)}
 			{selectedData.placeModal && (

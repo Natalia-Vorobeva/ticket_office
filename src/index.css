@@ -254,3 +254,14 @@
     justify-content: flex-end !important;
   }
 }
+
+@keyframes border-run {
+  0% { clip-path: inset(0 0 0 0); }
+  25% { clip-path: inset(0 0 0 100%); }
+  50% { clip-path: inset(100% 0 0 0); }
+  75% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+.animate-border-run {
+  animation: border-run 4s linear infinite;
+}
