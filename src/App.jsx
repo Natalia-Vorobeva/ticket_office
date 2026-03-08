@@ -369,13 +369,15 @@ function App() {
 	};
 
 	const handleInfoHalls = (num) => {
-		const s = listActiveHalls.includes(num)
-		if (s == true) {
-			setHallInfo("")
-		} else {
-			setHallInfo(HALL_INFO)
-		}
-	}
+  const s = listActiveHalls.includes(num);
+  if (s) {
+    setHallInfo('');
+    setInfo('');
+  } else {
+    setHallInfo(HALL_INFO);
+    setInfo(HALL_INFO); 
+  }
+};
 
 	const visibleHall = (num) => {
 		setCurrentArrPlaces([])
@@ -460,7 +462,7 @@ function App() {
 	return (
 		<>
 			<div className={`px-4 sm:px-6 md:px-8 relative w-full max-w-full text-[2rem] md:text-[2.5rem] leading-[0.7] grid grid-rows-[auto_1fr_auto] gap-4 md:gap-6 min-h-screen bg-gradient-to-br from-[#0a0a1a] via-[#0f172a] to-[#0a0a1a] text-gray-100 overflow-x-hidden pb-[70px] ${selectedData.placeModal || selectFilmModal ? 'overflow-hidden' : ''}`}>
-				{/* Основной контент с нижним отступом */}
+				
 				<div className="max-w-full pt-3">
 					<Header
 						ticket={ticket}
@@ -473,7 +475,6 @@ function App() {
 				</div>
 
 				<div className='flex flex-col lg:flex-row gap-4 md:gap-6 isolate'>
-					{/* Фильмы – всегда */}
 					<div className='lg:basis-2/5 min-w-0 overflow-hidden'>
 						<div ref={filmsRef} className={`sticky top-4 ${ticket && "pointer-events-none"}`}>
 							<ListFilms
@@ -487,8 +488,6 @@ function App() {
 							/>
 						</div>
 					</div>
-
-					{/* Залы – только на больших экранах (lg и выше) */}
 					<div className='hidden lg:block lg:basis-3/5 relative z-[10]'>
 						<div className='bg-[#1e293b]/80 backdrop-blur-sm rounded-xl border border-[#334155] p-4 shadow-xl shadow-[#1e40af]/10'>
 							<HallList
