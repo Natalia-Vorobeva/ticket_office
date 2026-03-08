@@ -369,15 +369,15 @@ function App() {
 	};
 
 	const handleInfoHalls = (num) => {
-  const s = listActiveHalls.includes(num);
-  if (s) {
-    setHallInfo('');
-    setInfo('');
-  } else {
-    setHallInfo(HALL_INFO);
-    setInfo(HALL_INFO); 
-  }
-};
+		const s = listActiveHalls.includes(num);
+		if (s) {
+			setHallInfo('');
+			setInfo('');
+		} else {
+			setHallInfo(HALL_INFO);
+			setInfo(HALL_INFO);
+		}
+	};
 
 	const visibleHall = (num) => {
 		setCurrentArrPlaces([])
@@ -448,6 +448,7 @@ function App() {
 			setDataCurrentTheatre((prev) => { return { ...prev, halls: h } }
 			)
 			resetBooking();
+			setInfo('✓ Бронь сохранена');
 		}
 	}
 
@@ -462,7 +463,7 @@ function App() {
 	return (
 		<>
 			<div className={`px-4 sm:px-6 md:px-8 relative w-full max-w-full text-[2rem] md:text-[2.5rem] leading-[0.7] grid grid-rows-[auto_1fr_auto] gap-4 md:gap-6 min-h-screen bg-gradient-to-br from-[#0a0a1a] via-[#0f172a] to-[#0a0a1a] text-gray-100 overflow-x-hidden pb-[70px] ${selectedData.placeModal || selectFilmModal ? 'overflow-hidden' : ''}`}>
-				
+
 				<div className="max-w-full pt-3">
 					<Header
 						ticket={ticket}
