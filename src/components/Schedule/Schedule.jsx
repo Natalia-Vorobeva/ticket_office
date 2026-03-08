@@ -14,7 +14,6 @@ function Schedule({
 	const [forceCenter, setForceCenter] = useState(0);
 	const [showBigDates, setShowBigDates] = useState(false);
 
-	// Скрываем большие даты при смене фильма или базы дат (город/кинотеатр)
 	useEffect(() => {
 		setShowBigDates(false);
 	}, [dataBase, reservation.film]);
@@ -59,7 +58,6 @@ function Schedule({
 	return (
 		<div className='w-full min-w-0'>
 			<div className="text-center">
-				{/* Заголовок */}
 				<div className="flex items-center gap-2 mb-4">
 					<div className="w-2 h-6 rounded-full bg-gradient-to-b from-[#6d28d9] to-[#8b5cf6]"></div>
 					<h2 className="text-lg md:text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
@@ -67,7 +65,6 @@ function Schedule({
 					</h2>
 				</div>
 
-				{/* Мини-датчики (всегда видны) */}
 				<div className="flex gap-1 mb-2 overflow-x-auto pb-1">
 					{dataBase.map((item, index) => {
 						const isActive = selectedDateIndex === index;

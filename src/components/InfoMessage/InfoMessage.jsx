@@ -1,7 +1,16 @@
+import { useEffect } from "react";
+
 function InfoMessage({
 	info,
 	infoPast
 }) {
+
+	useEffect(() => {
+		if (window.navigator && window.navigator.vibrate) {
+			window.navigator.vibrate(200); 
+		}
+	}, [info, infoPast]);
+
 	const hasMessages = info || infoPast;
 	const infoStyles = {
 		container: 'bg-gradient-to-r from-[#1a1a2e]/80 to-[#2d2d4d]/60 border-l-4 border-[#6d28d9]',
